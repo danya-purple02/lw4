@@ -1,7 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+using namespace std;
 
-
+void print_tree(struct Node* r, int l);
+struct Node* CreateTree(struct Node* root, struct Node* r, int data);
+struct Node* SearchElement(struct Node* t, int data);
 
 struct Node 
 {
@@ -9,42 +12,74 @@ struct Node
 	struct Node* left;
 	struct Node* right;
 };
-
-struct Node* root;
-
+struct Node* root, *res;
 
 int main()
 {
-	int D, start = 1;
-
+	int D, choise = 0, start = 1, search_value = 0;
 	root = NULL;
-	printf("-1 - окончание построения дерева\n");
-
-
-
-
-
-
-	while (start)
+	while (1) 
 	{
-		printf("Введите число: ");
-		scanf_s("%d", &D);
-		if (D == -1)
+		cout << "choose action:" << endl;
+		cout << "1 - create binary tree" << endl << "2 - search value" << endl << "3 - print tree" << endl << "4 - exit program" << endl;
+		cin >> choise;
+		switch (choise) 
 		{
-			printf("Построение дерева окончено\n\n");
-			start = 0;
+			case 1: 
+			{
+				if (root != NULL) 
+				{
+					cout << "tree already exists" << endl << endl;
+					continue;
+				}
+				cout << "to stop enter -1" << endl;
+				while (start)
+				{
+					cout << "type number: ";
+					cin >> D;
+					if (D == -1)
+					{
+						cout << "construction is done" << endl << endl;
+						start = 0;
+					}
+					else 
+					{
+						root = CreateTree(root, root, D);
+					}
+				}
+				continue;
+			}
+			case 2: 
+			{
+				cout << "enter search value: ";
+				cin >> search_value;
+				res = SearchElement(root, search_value);
+				if (!res)
+				{
+					continue;
+				}
+				cout << "element exists" << endl << endl;
+				continue;
+			}
+			case 3: 
+			{
+				print_tree(root, 0);
+				cout << endl << endl;
+				continue;
+			}
+			case 4: 
+			{
+				return 0;
+			}
+			default: 
+			{ 
+				cout << "must type 1 - 4" << endl;
+				continue;
+			}
 		}
-		else
-			root = CreateTree(root, root, D);
-
 	}
-
-	print_tree(root, 0);
-
-	scanf_s("%d", &D);
-	return 0;
+	
 }
-
 
 void print_tree(struct Node* r, int l)
 {
@@ -53,14 +88,12 @@ void print_tree(struct Node* r, int l)
 	{
 		return;
 	}
-
 	print_tree(r->right, l + 1);
 	for (int i = 0; i < l; i++)
 	{
 		printf(" ");
 	}
-
-	printf("%d\n", r->data);
+	cout << r->data;
 	print_tree(r->left, l + 1);
 }
 
@@ -72,7 +105,7 @@ struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 		r = (struct Node*)malloc(sizeof(struct Node));
 		if (r == NULL)
 		{
-			printf("Ошибка выделения памяти");
+			cout << "malloc error";
 			exit(0);
 		}
 
@@ -85,7 +118,6 @@ struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 		else root->right = r;
 		return r;
 	}
-
 	if (data > r->data) 
 	{
 		CreateTree(r, r->left, data);
@@ -95,4 +127,28 @@ struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 		CreateTree(r, r->right, data);
 	}
 	return root;
+}
+
+struct Node* SearchElement(struct Node* t, int data)
+{
+	if (t == NULL) 
+	{
+		cout << "element does not exist" << endl;
+		return 0;
+	}
+
+	if (data > t->data)
+	{
+		t = t->left;
+		SearchElement(t, data);
+	}
+	else if (data < t->data)
+	{
+		t = t->right;
+		SearchElement(t, data);
+	}
+	else if (data == t->data) 
+	{
+		return t;
+	}
 }
