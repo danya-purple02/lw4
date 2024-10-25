@@ -5,7 +5,7 @@ using namespace std;
 void print_tree(struct Node* r, int l);
 struct Node* CreateTree(struct Node* root, struct Node* r, int data);
 int CheckAmount(struct Node* t, int data, int r);
-void heroin(struct Node* r);
+void depth_first_search(struct Node* r);
 
 struct Node
 {
@@ -14,7 +14,6 @@ struct Node
 	struct Node* right;
 };
 struct Node* root;
-int v = 0;
 
 int main()
 {
@@ -71,7 +70,7 @@ int main()
 		}
 		case 4: 
 		{
-			heroin(root);
+			depth_first_search(root);
 			cout << endl << endl;
 			continue;
 		}
@@ -86,9 +85,7 @@ int main()
 		}
 		}
 	}
-
 }
-
 
 void print_tree(struct Node* r, int l)
 {
@@ -106,7 +103,6 @@ void print_tree(struct Node* r, int l)
 	print_tree(r->left, l + 1);
 }
 
-
 struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 {
 	if (r == NULL)
@@ -121,7 +117,6 @@ struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 		r->left = NULL;
 		r->right = NULL;
 		r->data = data;
-		v++;
 		if (root == NULL) return r;
 
 		if (data > root->data)	root->left = r;
@@ -172,13 +167,13 @@ int CheckAmount(struct Node* t, int data, int r)
 	}
 }
 
-void heroin(struct Node* r) 
+void depth_first_search(struct Node* r)
 {
 	if (r == NULL) 
 	{
 		return;
 	}
 	cout << r->data << "  ";
-	heroin(r->left);
-	heroin(r->right);
+	depth_first_search(r->left);
+	depth_first_search(r->right);
 }
